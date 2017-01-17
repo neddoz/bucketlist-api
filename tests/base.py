@@ -13,11 +13,11 @@ class BaseTest(TestCase):
 
     def setUp(self):
         self.client = self.create_app().test_client()
-        self.api = api
+        self.user_credentials = dict(username='kayeli', password='password')
         db.create_all()
         api.add_resource(Index, '/', '/api/v1', endpoint='index')
         api.add_resource(RegisterUser, '/auth/register', endpoint='register')
-        # api.add_resource(LoginUser, 'api/v1/auth/login', endpoint='login')
+        api.add_resource(LoginUser, '/auth/login', endpoint='login')
         # api.add_resource(BucketListRepo, 'api/v1/bucketlists/', endpoint='bucketlist')
 
     def tearDown(self):
