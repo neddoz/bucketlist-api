@@ -8,7 +8,6 @@ class Config(object):
     be created and configured.
     '''
     SECRET_KEY = '@neddox1isAwesome'
-    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     DEFAULT_PER_PAGE = 20
     MAX_PER_PAGE = 100
@@ -31,12 +30,12 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    # PostgreSQL
     pg_db_username = 'api'
     pg_db_password = 'password'
-    pg_db_name = 'bucketlist'
+    pg_db_name = 'test'
     pg_db_hostname = 'localhost'
 
+    # PostgreSQL
     SQLALCHEMY_DATABASE_URI = "postgresql://{DB_USER}:{DB_PASS}@{DB_ADDR}/{DB_NAME}".format(DB_USER=pg_db_username,
                                                                                             DB_PASS=pg_db_password,
                                                                                             DB_ADDR=pg_db_hostname,
