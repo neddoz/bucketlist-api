@@ -7,7 +7,7 @@ from config import config
 api_blue_print = Blueprint('api', __name__, url_prefix='/api/v1')
 #initialize the api class
 api = Api(api_blue_print)
-#initialize the database
+#instantiate object from SQLAlchemy
 db = SQLAlchemy()
 
 def create_app(configuration):

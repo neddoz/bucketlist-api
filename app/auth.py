@@ -21,9 +21,9 @@ def verify_password(username, password):
 
 @token_based_authentication.verify_token
 def verify_token(token):
-    user = User.verify_auth_token(token)
-    if user:
-        g.user = user
+    user_id = User.verify_auth_token(token)
+    if user_id:
+        g.user = User.query.filter_by(id=user_id).first()
         return True
     return False
 

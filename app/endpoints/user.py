@@ -4,10 +4,12 @@ from app.models import User
 from app import db
 from app.auth import multiple_auth
 from flask import g
+
+
 class Index(Resource):
-    decorators = [multiple_auth.login_required]
+    # decorators = [multiple_auth.login_required]
     def get(self):
-        return 'welcome!'
+        return 'welcome!', 200
 
 
 class RegisterUser(Resource):

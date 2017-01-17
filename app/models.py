@@ -4,6 +4,8 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                          as Serializer, BadSignature, SignatureExpired)
 from config import config
+from datetime import datetime
+
 
 class User(db.Model):
 
@@ -11,6 +13,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), nullable=False, unique=True)
     password_hash = db.Column(db.String(128))
+    bucketlist = db.relationship('BucketList', backref='users',
+                                cascade='all, delete', lazy='dynamic')
 
     def __repr__(self):
         return "<User %s>" %self.username
@@ -24,7 +28,7 @@ class User(db.Model):
     def generate_auth_token(self, expiration = 600):
         """
         the token is an encrypted version of a dictionary that has the id of the user.
-        The token will also have an expiration time embedded in it, 
+        The token will also have an expiration time embedded in it,
         which by default will be of ten minutes
         """
         s = Serializer(current_app.config['SECRET_KEY'], expires_in = expiration)
@@ -39,5 +43,20 @@ class User(db.Model):
             return 'valid token, but expired!'
         except BadSignature:
             return 'invalid token'
-        user = User.query.get(data['id'])
-        return user
+        user_id = data['id']
+        return user_id
+
+
+class BucketList(db.Model):
+
+    __tablename__ = 'bucketlists'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False, unique=True)
+    items = db.Column(db.JSON)
+    date_created = db.Column(db.DateTime, default=datetime.now)
+    created_by = db.Column(db.String(20), nullable=False)
+    date_modified = db.Column(db.DateTime, onupdate=datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return "<BucketList %s>" %self.name
