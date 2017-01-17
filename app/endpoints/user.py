@@ -27,7 +27,7 @@ class RegisterUser(Resource):
         if username is None or password is None:
             abort(400, msg='Password and username required!')
         if User.query.filter_by(username=username).first() is not None:
-             abort(400, msg='Username already exists!')
+             abort(400, msg='A User with the same name already exists!')
 
         #create a user instance
         user = User(username=username)
@@ -55,13 +55,9 @@ class LoginUser(Resource):
         user = User.query.filter_by(username=username).first()
 
         #for wrong username provided
-        if not user:
-            return 'Sorry user not found!'
-
-        #for wrong password provided
-        if not user.verify_password(password):
-            return 'Wrong password!'
+        if not user or not user.verify_password(password):
+            abort(400, msg='Sorry user not found check credentials!')
 
         #return a token for use on subsequent requests
         token = user.generate_auth_token()
-        return { 'token': token.decode('ascii') }, 201
+        return { 'token': token.decode('ascii') }, 200
