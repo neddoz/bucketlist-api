@@ -39,12 +39,12 @@ class User(db.Model):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
+            user_id = data['id']
+            return user_id
         except SignatureExpired:
             return 'valid token, but expired!'
         except BadSignature:
             return 'invalid token'
-        user_id = data['id']
-        return user_id
 
 
 class BucketList(db.Model):
@@ -52,11 +52,27 @@ class BucketList(db.Model):
     __tablename__ = 'bucketlists'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=True)
-    items = db.Column(db.JSON)
     date_created = db.Column(db.DateTime, default=datetime.now)
     created_by = db.Column(db.String(20), nullable=False)
     date_modified = db.Column(db.DateTime, onupdate=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    bucketlist = db.relationship('BucketlistItems', backref='bucketlists',
+                                cascade='all, delete', lazy='dynamic')
 
     def __repr__(self):
         return "<BucketList %s>" %self.name
+
+
+class BucketlistItems(db.Model):
+
+    __tablename__ = 'bucketlistitems'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False, unique=True)
+    description = db.Column(db.String(255), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.now)
+    date_modified = db.Column(db.DateTime, onupdate=datetime.now)
+    done = db.Column(db.Boolean, default=False)
+    bucketlist_id = db.Column(db.Integer, db.ForeignKey('bucketlists.id'))
+
+    def __repr__(self):
+        return "<BucketlistItems %s>" %self.name
