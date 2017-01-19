@@ -5,6 +5,7 @@ from app import create_app, db, api
 from app.models import User, BucketList
 from app.endpoints.user import Index, RegisterUser, LoginUser
 from app.endpoints.bucketlist import BucketListRepo
+from app.endpoints.bucketlist_items import BucketListItemsRepo
 
 
 #instantiate the app
@@ -23,7 +24,12 @@ manager.add_command('db', MigrateCommand)
 api.add_resource(Index, '/', '/api/v1', endpoint='index')
 api.add_resource(RegisterUser, '/auth/register', endpoint='register')
 api.add_resource(LoginUser, '/auth/login', endpoint='login')
-api.add_resource(BucketListRepo, '/bucketlists/', endpoint='bucketlist')
+api.add_resource(BucketListItemsRepo, '/bucketlists/<id>/items/',
+                        endpoint='bucketlist_items')
+api.add_resource(BucketListItemsRepo, '/bucketlists/<id>/items/<item_id>')
+api.add_resource(BucketListRepo, '/bucketlists/<id>',
+                        endpoint='bucketlists')
+api.add_resource(BucketListRepo, '/bucketlists/')
 
 if __name__ == '__main__':
     manager.run()

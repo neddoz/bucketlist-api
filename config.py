@@ -19,7 +19,7 @@ class DevelopmentConfig(Config):
     pg_db_username = 'api'
     pg_db_password = 'password'
     pg_db_name = 'bucketlist'
-    pg_db_hostname = 'localhost'
+    pg_db_hostname = '127.0.0.1'
 
     # PostgreSQL
     SQLALCHEMY_DATABASE_URI = "postgresql://{DB_USER}:{DB_PASS}@{DB_ADDR}/{DB_NAME}".format(DB_USER=pg_db_username,
