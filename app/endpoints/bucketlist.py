@@ -1,9 +1,9 @@
-from flask import jsonify
 from flask_restful import Resource, reqparse, abort
-from app.models import BucketList
+from app.models import BucketList, BucketlistItems
 from app import db
 from app.auth import multiple_auth
 from flask import g
+from flask import jsonify, json
 
 
 class BucketListRepo(Resource):
@@ -32,4 +32,89 @@ class BucketListRepo(Resource):
         db.session.add(bucketlist)
         db.session.commit()
 
-        return "Bucket list created succfull with the ID: %s"% bucketlist.id, 201
+        return "Bucket list created succefully with the ID: %s"% bucketlist.id, 201
+
+    def get(self, id=None):
+        all_bucket_lists = []
+        if not id:
+            bucketlists_retrieved = BucketList.query.filter_by(user_id=g.user.id).all()
+            items = []
+            for bucket_list in bucketlists_retrieved:
+                #retrieve a list of items linked to each bucket list
+                retrieved_items = BucketlistItems.query.filter_by(bucketlist_id=bucket_list.id).all()
+                for item in retrieved_items:
+                    item_dict = {"id": item.id,
+                                "name":item.description,
+                                "date_created":str(item.date_created),
+                                "date_modified":str(item.date_modified),
+                                "done":item.done}
+                    items.append(item_dict)
+                #return the bucket list dictinary together with its contents
+                bucket_list_and_items = {"id":bucket_list.id,
+                    "bucket_list_name": bucket_list.name,
+                    "items":items or "No items Added!",
+                    "date_created": str(bucket_list.date_created),
+                    "date_modified": str(bucket_list.date_modified) or None,
+                    "created_by": g.user.username}
+                all_bucket_lists.append(bucket_list_and_items)
+            return all_bucket_lists
+
+        #otherwise return one bucket list for id 2given
+        bucketlist_retrieved = BucketList.query.filter_by(id=id).first()
+
+        if not bucketlist_retrieved:
+            abort(400, msg='No bucket list with such an ID')
+
+        items = []
+        retrieved_items = BucketlistItems.query.filter_by(bucketlist_id=bucketlist_retrieved.id).all()
+        for item in retrieved_items:
+            item_dict = {"id": item.id,
+                        "name":item.description,
+                        "date_created":str(item.date_created),
+                        "date_modified":str(item.date_modified),
+                        "done":item.done}
+            items.append(item_dict)
+        return {"id":bucketlist_retrieved.id,
+                "bucket_list_name": bucketlist_retrieved.name,
+                "items":items or "No items Added!",
+                "date_created": str(bucketlist_retrieved.date_created),
+                "date_modified": str(bucketlist_retrieved.date_modified) or None,
+                "created_by": g.user.username}
+
+    def put(self, id=None):
+        #validation
+        if not id:
+            abort(400, msg="An id is manadatory to Ammend a Bucketlist!")
+
+        bucketlist_retrieved = BucketList.query.filter_by(id=id).first()
+        if not bucketlist_retrieved:
+            abort(400, msg="No record found!")
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, help='Name of bucket list',
+                            required=True)
+        args = parser.parse_args()
+
+        bucketlist_retrieved.name = args['name']
+
+        #persist the changes in the database
+        db.session.add(bucketlist_retrieved)
+        db.session.commit()
+
+        return "Update success!", 201
+
+    def delete(self, id=None):
+
+        #validation
+        if not id:
+            abort(400, msg="An id is manadatory to Delete a Bucketlist!")
+
+        bucketlist_retrieved = BucketList.query.filter_by(id=id).first()
+        if not bucketlist_retrieved:
+            abort(400, msg="No record found!")
+
+        #persist the changes in the database
+        db.session.delete(bucketlist_retrieved)
+        db.session.commit()
+
+        return "Bucket list Deleted!", 201
