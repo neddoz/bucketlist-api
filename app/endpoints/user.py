@@ -60,4 +60,4 @@ class LoginUser(Resource):
 
         #return a token for use on subsequent requests
         token = user.generate_auth_token()
-        return { 'token': token.decode('ascii') }, 200
+        return { 'token': token.decode('utf-8') }, 200
