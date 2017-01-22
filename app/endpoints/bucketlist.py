@@ -33,8 +33,8 @@ class BucketListRepo(Resource):
         return "Bucket list created succefully with the ID: %s"% bucketlist.id, 201
 
     def get(self, id=None):
-        searchword = request.args.get('q', '') or None
-        limit = request.args.get('limit', '') or 20
+        searchword = request.args.get('q') or None
+        limit = request.args.get('limit') or 20
         kwargs = {"user_id": g.user.id}
         if searchword:
             kwargs.update({"name": searchword})
