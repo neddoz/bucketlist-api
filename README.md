@@ -35,4 +35,15 @@ Specification for the API is as follows:
      ```
      pip install -r requirements.txt
      ```
-  5. Next is to issue commands to start the application.
+  5. Next is to issue commands to start dabase migrations and set up the relations.
+    One after the other issue the following commands:
+    ```
+    python manage.py db init
+
+    python manage.py db migrate
+
+    python manage.py db upgrade
+    ```
+  6. Next is to start the application by issuing the command **python manage.py runserver**
+    The server should be running on [http://127.0.0.1:5000]
+    
