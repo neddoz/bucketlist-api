@@ -30,4 +30,4 @@ def verify_token(token):
 @basic_authorization.error_handler
 @token_based_authentication.error_handler
 def auth_error():
-    return "Sorry Access Denied!"
+    return {"message":"Sorry Access Denied!"}, 401
