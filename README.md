@@ -1,7 +1,7 @@
 
 [![CircleCI](https://circleci.com/gh/neddoz/bucketlist-api.svg?style=svg)](https://circleci.com/gh/neddoz/bucketlist-api)
 
-[![Coverage Status](https://coveralls.io/repos/github/neddoz/bucketlist-api/badge.svg?branch=develop)](https://coveralls.io/github/neddoz/bucketlist-api?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/neddoz/bucketlist-api/badge.svg)](https://coveralls.io/github/neddoz/bucketlist-api)
 # bucketlist-api
 BucketList Application API built using python flask framework
 
