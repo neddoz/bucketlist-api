@@ -20,7 +20,7 @@ Specification for the API is as follows:
 | PUT /bucketlists/<id>/items/<item_id>     | Update a bucket list item        |
 | DELETE /bucketlists/<id>/items/<item_id>  | Delete an item in a bucket list  |
 
-# Insallation
+# Installation
 ## Database
   The Application employs Postgresql. Firstly, is to make sure you have postgres up
   and running. Create a user **api** with a password: **password**.Next create a
@@ -46,4 +46,9 @@ Specification for the API is as follows:
     ```
   6. Next is to start the application by issuing the command **python manage.py runserver**
     The server should be running on [http://127.0.0.1:5000]
-    
+
+# Usage
+  To use the application Postman (Google chrome extension is required).So make sure
+  you have the extension added to chrome.After successfully installing the extension,
+  the following steps highlight the usage:
+  1. Register a user by making a post request against the url **http://127.0.0.1:5000/api/v1.0/auth/register**.

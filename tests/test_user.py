@@ -1,7 +1,8 @@
 from app.models import User
-from .base import BaseTest
+from tests import base
 from flask import json
 
+BaseTest = base.BaseTest
 
 class TestUser(BaseTest):
     def test_index(self):

@@ -47,7 +47,8 @@ class BucketListRepo(Resource):
                 retrieved_items = BucketlistItems.query.filter_by(bucketlist_id=bucket_list.id).all()
                 for item in retrieved_items:
                     item_dict = {"id": item.id,
-                                "name":item.description,
+                                "name":item.name,
+                                "description": item.description,
                                 "date_created":str(item.date_created),
                                 "date_modified":str(item.date_modified),
                                 "done":item.done}
