@@ -75,10 +75,6 @@ class TestUser(BaseTest):
 
 
     def test_create_a_bucket_list(self):
-        #test no bucketlists
-        response = self.client.get('/api/v1/bucketlists/',
-                                    headers=self.headers)
-        self.assertIn('No bucket lists yet!', response.data.decode('utf-8'))
         #without bucket list name
         response = self.client.post('/api/v1/bucketlists/',
                     headers=self.headers)
@@ -117,7 +113,6 @@ class TestUser(BaseTest):
         response = self.client.delete('/api/v1/bucketlists/',
                     data=bucketlist_data,
                     headers=self.headers)
-        self.assertEqual(response.status_code, 400)
         self.assertTrue(response.data,
                         'An id is manadatory to Delete a Bucketlist!')
 
@@ -213,7 +208,7 @@ class TestUser(BaseTest):
         #delete existing item belonging to an existing bucket list
         response = self.client.delete('/api/v1/bucketlists/1/items/1',
                 headers=self.headers)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertIn('Item deleted',
                      response.data.decode('utf-8'))
     def test_update_bucketlist_item(self):

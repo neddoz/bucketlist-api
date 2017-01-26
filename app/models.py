@@ -56,7 +56,7 @@ class BucketList(db.Model):
     created_by = db.Column(db.String(20), nullable=False)
     date_modified = db.Column(db.DateTime, onupdate=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    bucketlist = db.relationship('BucketlistItems', backref='bucketlists',
+    items = db.relationship('BucketlistItems', backref='bucketlists',
                                 cascade='all, delete', lazy='dynamic')
 
     def __repr__(self):

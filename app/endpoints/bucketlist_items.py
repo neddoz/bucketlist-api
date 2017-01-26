@@ -1,5 +1,4 @@
 from flask_restful import Resource, reqparse, abort
-from flask_restful import Resource, reqparse, abort
 from app.models import BucketList, BucketlistItems
 from app import db
 from app.auth import multiple_auth
@@ -8,7 +7,7 @@ from flask import g
 class BucketListItemsRepo(Resource):
     decorators = [multiple_auth.login_required]
 
-    def post(self, id=None):
+    def post(self, bucketlist_id=None):
         parser = reqparse.RequestParser()
         parser.add_argument('item_name', type=str,
                                         help='Bucket list name Required',
@@ -19,7 +18,7 @@ class BucketListItemsRepo(Resource):
                             required=True)
         args = parser.parse_args()
 
-        bucketlist_retrieved = BucketList.query.get(id)
+        bucketlist_retrieved = BucketList.query.get(bucketlist_id)
 
         #bucket list not found
         if not bucketlist_retrieved:
@@ -37,7 +36,7 @@ class BucketListItemsRepo(Resource):
         status = args['status'] or False
         new_item = BucketlistItems(name=args['item_name'],
                            done=status,
-                           bucketlist_id=id,
+                           bucketlist_id=bucketlist_id,
                            description= args['description'])
         db.session.add(new_item)
         db.session.commit()
@@ -80,7 +79,7 @@ class BucketListItemsRepo(Resource):
 
         db.session.commit()
 
-        return {"message":"Update was successfull!"}, 201
+        return {"message":"Update was successfull!"}, 200
 
     def delete(self, id=None, item_id=None):
 
@@ -105,4 +104,4 @@ class BucketListItemsRepo(Resource):
         db.session.delete(bucket_list_item_retrieved)
         db.session.commit()
 
-        return {"message": "Item deleted"}, 201
+        return {"message": "Item deleted"}, 200
