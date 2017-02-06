@@ -6,7 +6,7 @@ from app.serializer import bucketlist_serializer, bucketlist_collection_serializ
 from app.utils import paginate
 from flask import g, request
 from flask import jsonify, json
-
+import logging
 
 class BucketListRepo(Resource):
 
@@ -37,12 +37,14 @@ class BucketListRepo(Resource):
     @marshal_with(bucketlist_collection_serializer)
     @paginate
     def get(self):
-        bucketlists_retrieved = BucketList.query.filter_by(user_id=g.user.id).all()
+        pass
 
-        if bucketlists_retrieved:
-            return bucketlists_retrieved, 200
-
-        return {"message":"No bucket lists yet!"}, 200
+        # bucketlists_retrieved = BucketList.query.filter_by(user_id=g.user.id).all()
+        #
+        # if bucketlists_retrieved:
+        #     return bucketlists_retrieved, 200
+        #
+        # return {"message":"No bucket lists yet!"}, 200
 
 class SingleBucketListRepo(Resource):
      decorators = [multiple_auth.login_required]
